@@ -65,16 +65,16 @@ class Entertainment(commands.Cog):
 
         await ctx.send(embed=reverseEmbed)
 
-    @commands.command(aliases=['yt-search', 'yt'], usage='youtube <message>')
-    async def youtube(self, ctx, *, message: str):
-        """Search for something on YouTube!"""
-
-        query_string = parse.urlencode({'search_query': message})
-        htm_content = request.urlopen(
-            'http://www.youtube.com/results?' + query_string)
-        search_results = re.findall(r'/watch\?v=(.{11})',
-                                    htm_content.read().decode())
-        await ctx.send("Ay\n" + 'http://www.youtube.com/watch?v=' + search_results[0])
+    # @commands.command(aliases=['yt-search', 'yt'], usage='youtube <message>')
+    # async def youtube(self, ctx, *, message: str):
+    #     """Search for something on YouTube!"""
+    #
+    #     query_string = parse.urlencode({'search_query': message})
+    #     htm_content = request.urlopen(
+    #         'http://www.youtube.com/results?' + query_string)
+    #     search_results = re.findall(r'/watch\?v=(.{11})',
+    #                                 htm_content.read().decode())
+    #     await ctx.send("Ay\n" + 'http://www.youtube.com/watch?v=' + search_results[0])
 
     @commands.command(usage='cat')
     async def cat(self, ctx):

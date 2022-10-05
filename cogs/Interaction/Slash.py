@@ -1705,16 +1705,16 @@ class Slash(commands.Cog):
 
         await interaction.send(embed=reverseEmbed)
 
-    @nextcord.slash_command(name='youtube')
-    async def youtube_slash(self, interaction: nextcord.Interaction, *, message: str):
-        """Search for something on YouTube!"""
-
-        query_string = parse.urlencode({'search_query': message})
-        htm_content = request.urlopen(
-            'http://www.youtube.com/results?' + query_string)
-        search_results = re.findall(r'/watch\?v=(.{11})',
-                                    htm_content.read().decode())
-        await interaction.send("Ay\n" + 'http://www.youtube.com/watch?v=' + search_results[0])
+    # @nextcord.slash_command(name='youtube')
+    # async def youtube_slash(self, interaction: nextcord.Interaction, *, message: str):
+    #     """Search for something on YouTube!"""
+    #
+    #     query_string = parse.urlencode({'search_query': message})
+    #     htm_content = request.urlopen(
+    #         'http://www.youtube.com/results?' + query_string)
+    #     search_results = re.findall(r'/watch\?v=(.{11})',
+    #                                 htm_content.read().decode())
+    #     await interaction.send("Ay\n" + 'http://www.youtube.com/watch?v=' + search_results[0])
 
     @nextcord.slash_command(name='cat')
     async def cat_slash(self, interaction: nextcord.Interaction):
