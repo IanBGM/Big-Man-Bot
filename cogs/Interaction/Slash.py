@@ -42,7 +42,8 @@ class Slash(commands.Cog):
             await interaction.user.send(embed=assistanceEmbed)
             await interaction.send("Ay! (I messaged you my commands!)")
         except nextcord.Forbidden:
-            await interaction.send("Ay.. (Are your DMs disabled? I can't DM you..)", ephemeral=True)
+            # await interaction.send("Ay.. (Are your DMs disabled? I can't DM you..)", ephemeral=True)
+            await interaction.send(embed=assistanceEmbed)
 
     @nextcord.slash_command(name="command")
     async def command_slash(self, interaction: nextcord.Interaction, name):

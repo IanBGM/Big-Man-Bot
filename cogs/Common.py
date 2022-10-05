@@ -42,7 +42,7 @@ class Common(commands.Cog):
             await ctx.message.add_reaction(f"{External.Emojis.big_man_icon}")
             await ctx.reply("Ay! (I messaged you my commands!)", mention_author=False)
         except nextcord.Forbidden:
-            await ctx.reply("Ay.. (Are your DMs disabled? I can't DM you..)")
+            await ctx.reply(embed=assistanceEmbed, mention_author=False)
 
     @commands.command(aliases=["cmd"], usage="command <name>")
     async def command(self, ctx, *, name):
