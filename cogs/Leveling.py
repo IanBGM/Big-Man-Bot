@@ -2,7 +2,6 @@ import asyncio
 import random
 import sqlite3
 
-import cooldowns
 import nextcord
 from easy_pil import Editor, load_image_async
 from nextcord.ext import commands
