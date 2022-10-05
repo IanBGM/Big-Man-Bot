@@ -14,20 +14,20 @@ class Entertainment(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
-    @commands.command(aliases=['convert'], usage='translate <language> <message>')
-    async def translate(self, ctx, language: str, *, message: str):
-        """Translate messages to another language!"""
-        translator = Translator()
-
-        try:
-            translation = translator.translate(message, dest=language)
-        except ValueError:
-            return await ctx.send("Ay.. (Something went wrong.. is that language correct?)")
-
-        translateEmbed = nextcord.Embed(title='Ay! (Translation!)', description=f"Ay \n```\n(\"{translation.text}\")\n```", color=Colors.dark_grey, timestamp=ctx.message.created_at)
-        translateEmbed.set_footer(text=f"Ay! (Language: {language.upper()}!)")
-
-        await ctx.send(embed=translateEmbed)
+    # @commands.command(aliases=['convert'], usage='translate <language> <message>')
+    # async def translate(self, ctx, language: str, *, message: str):
+    #     """Translate messages to another language!"""
+    #     translator = Translator()
+    #
+    #     try:
+    #         translation = translator.translate(message, dest=language)
+    #     except ValueError:
+    #         return await ctx.send("Ay.. (Something went wrong.. is that language correct?)")
+    #
+    #     translateEmbed = nextcord.Embed(title='Ay! (Translation!)', description=f"Ay \n```\n(\"{translation.text}\")\n```", color=Colors.dark_grey, timestamp=ctx.message.created_at)
+    #     translateEmbed.set_footer(text=f"Ay! (Language: {language.upper()}!)")
+    #
+    #     await ctx.send(embed=translateEmbed)
 
     @commands.command(name='8ball', aliases=['fortune'], usage='8ball <message>')
     async def _8ball(self, ctx, *, message: str):

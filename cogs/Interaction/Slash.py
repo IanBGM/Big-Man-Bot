@@ -1650,20 +1650,20 @@ class Slash(commands.Cog):
 
     # region ENTERTAINMENT
 
-    @nextcord.slash_command(name='translate')
-    async def translate_slash(self, interaction: nextcord.Interaction, language: str, *, message: str):
-        """Translate messages to another language!"""
-        translator = Translator()
-
-        try:
-            translation = translator.translate(message, dest=language)
-        except ValueError:
-            return await interaction.send("Ay.. (Something went wrong.. is that language correct?)", ephemeral=True)
-
-        translateEmbed = nextcord.Embed(title='Ay! (Translation!)', description=f"Ay \n```\n(\"{translation.text}\")\n```", color=Colors.dark_grey, timestamp=interaction.created_at)
-        translateEmbed.set_footer(text=f"Ay! (Language: {language.upper()}!)")
-
-        await interaction.send(embed=translateEmbed)
+    # @nextcord.slash_command(name='translate')
+    # async def translate_slash(self, interaction: nextcord.Interaction, language: str, *, message: str):
+    #     """Translate messages to another language!"""
+    #     translator = Translator()
+    #
+    #     try:
+    #         translation = translator.translate(message, dest=language)
+    #     except ValueError:
+    #         return await interaction.send("Ay.. (Something went wrong.. is that language correct?)", ephemeral=True)
+    #
+    #     translateEmbed = nextcord.Embed(title='Ay! (Translation!)', description=f"Ay \n```\n(\"{translation.text}\")\n```", color=Colors.dark_grey, timestamp=interaction.created_at)
+    #     translateEmbed.set_footer(text=f"Ay! (Language: {language.upper()}!)")
+    #
+    #     await interaction.send(embed=translateEmbed)
 
     @nextcord.slash_command(name='8ball')
     async def _8ball_slash(self, interaction: nextcord.Interaction, *, message: str):
