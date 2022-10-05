@@ -38,8 +38,11 @@ class Slash(commands.Cog):
         assistanceEmbed.add_field(name="Ay (Leveling)", value="```\n" + " \n".join(map(str, External.get_commands(self.client, "Leveling"))) + "\n```")
         assistanceEmbed.add_field(name="Ay (Holder)", value="```\n" + " \n".join(map(str, External.get_commands(self.client, "Holder"))) + "\n```")
 
-        await interaction.user.send(embed=assistanceEmbed)
-        await interaction.send("Ay! (I messaged you my commands!)")
+        try:
+            await interaction.user.send(embed=assistanceEmbed)
+            await interaction.send("Ay! (I messaged you my commands!)")
+        except nextcord.Forbidden:
+            await interaction.send("Ay.. (Are your DMs disabled? I can't DM you..)", ephemeral=True)
 
     @nextcord.slash_command(name="command")
     async def command_slash(self, interaction: nextcord.Interaction, name):
