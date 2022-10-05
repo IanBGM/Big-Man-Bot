@@ -37,9 +37,12 @@ class Common(commands.Cog):
         assistanceEmbed.add_field(name="Ay (Leveling)", value="```\n" + " \n".join(map(str, External.get_commands(self.client, "Leveling"))) + "\n```")
         assistanceEmbed.add_field(name="Ay (Holder)", value="```\n" + " \n".join(map(str, External.get_commands(self.client, "Holder"))) + "\n```")
 
-        await ctx.author.send(embed=assistanceEmbed)
-        await ctx.message.add_reaction(f"{External.Emojis.big_man_icon}")
-        await ctx.reply("Ay! (I messaged you my commands!)", mention_author=False)
+        try:
+            await ctx.author.send(embed=assistanceEmbed)
+            await ctx.message.add_reaction(f"{External.Emojis.big_man_icon}")
+            await ctx.reply("Ay! (I messaged you my commands!)", mention_author=False)
+        except nextcord.Forbidden:
+            await ctx.reply("Ay.. (I can't DM you.. are your DMs disabled?)")
 
     @commands.command(aliases=["cmd"], usage="command <name>")
     async def command(self, ctx, *, name):
