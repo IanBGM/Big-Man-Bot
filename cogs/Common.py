@@ -185,6 +185,11 @@ class Common(commands.Cog):
         emojiEmbed.set_footer(text=f"Ay! (ID: {emoji.id}!)")
         await ctx.send(embed=emojiEmbed)
 
+    # @commands.command(aliases=['servers', 'count'], usage='guilds')
+    # async def guilds(self, ctx):
+    #     """Sends guild count for me!"""
+    #     return await ctx.send(f"Ay! (I'm currently in **{len(self.client.guilds)} guild(s)**!)")
+
     async def cog_command_error(self, ctx, error):
 
         if isinstance(error, commands.MissingRequiredArgument):

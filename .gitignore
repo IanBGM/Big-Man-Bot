@@ -1,2 +1,5 @@
 .env
 .idea
+curr.sqlite
+level.sqlite
+main.sqlite

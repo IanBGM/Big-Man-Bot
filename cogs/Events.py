@@ -15,7 +15,7 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        activity = nextcord.Activity(type=nextcord.ActivityType.playing, name="Ay! (Hopefully I am of good help!)")
+        activity = nextcord.Activity(type=nextcord.ActivityType.playing, name=f"Ay! (Hopefully I am of good help!)")
         await self.client.change_presence(activity=activity, status=nextcord.Status.dnd)
 
         # region CURRENCY_DB

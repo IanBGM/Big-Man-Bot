@@ -977,35 +977,35 @@ class Slash(commands.Cog):
             return
 
     # noinspection SpellCheckingInspection
-    @nextcord.slash_command(name='bmdboard', guild_ids=Variables.guild_ids)
-    async def bmdboard_slash(self, interaction: nextcord.Interaction):
-        """Shows all the balances ranked!"""
-
-        db = sqlite3.connect('curr.sqlite')
-        cursor = db.cursor()
-
-        cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {interaction.guild.id}')
-        enabled = cursor.fetchone()
-        if enabled and not enabled[0]:
-            return await interaction.send('Ay.. (Economy is currently disabled for this server..)')
-
-        cursor.execute(f'SELECT user_id, wallet, bank FROM curr ORDER BY (wallet+bank) DESC LIMIT 10')
-        data = cursor.fetchall()
-
-        if data:
-            bmdEmbed = nextcord.Embed(title='Ay! (Global Economy System Leaderboard!)', color=Colors.dark_grey, timestamp=interaction.created_at)
-            count = 0
-
-            for table in data:
-                count += 1
-                user = interaction.guild.get_member(table[0])
-
-                bmdEmbed.add_field(name=f'Ay! ({count}. {user.name + "#" + user.discriminator})',
-                                   value=f"*Ay* (**BMD Flow** : *{table[1] + table[2]}*)", inline=False)
-
-            bmdEmbed.set_footer(text=f"Ay! (Top 10 Results!)")
-            return await interaction.send(embed=bmdEmbed)
-        return await interaction.send("Ay.. (I can't seem to find anyone stored in my database for the economy leaderboard..)")
+    # @nextcord.slash_command(name='bmdboard', guild_ids=Variables.guild_ids)
+    # async def bmdboard_slash(self, interaction: nextcord.Interaction):
+    #     """Shows all the balances ranked!"""
+    #
+    #     db = sqlite3.connect('curr.sqlite')
+    #     cursor = db.cursor()
+    #
+    #     cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {interaction.guild.id}')
+    #     enabled = cursor.fetchone()
+    #     if enabled and not enabled[0]:
+    #         return await interaction.send('Ay.. (Economy is currently disabled for this server..)')
+    #
+    #     cursor.execute(f'SELECT user_id, wallet, bank FROM curr ORDER BY (wallet+bank) DESC LIMIT 10')
+    #     data = cursor.fetchall()
+    #
+    #     if data:
+    #         bmdEmbed = nextcord.Embed(title='Ay! (Global Economy System Leaderboard!)', color=Colors.dark_grey, timestamp=interaction.created_at)
+    #         count = 0
+    #
+    #         for table in data:
+    #             count += 1
+    #             user = interaction.guild.get_member(table[0])
+    #
+    #             bmdEmbed.add_field(name=f'Ay! ({count}. {user.name + "#" + user.discriminator})',
+    #                                value=f"*Ay* (**BMD Flow** : *{table[1] + table[2]}*)", inline=False)
+    #
+    #         bmdEmbed.set_footer(text=f"Ay! (Top 10 Results!)")
+    #         return await interaction.send(embed=bmdEmbed)
+    #     return await interaction.send("Ay.. (I can't seem to find anyone stored in my database for the economy leaderboard..)")
 
     # endregion
 

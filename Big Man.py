@@ -9,6 +9,7 @@ client = commands.Bot(command_prefix=commands.when_mentioned_or('manta '), inten
 logger = Logger()
 load_dotenv(find_dotenv())
 TOKEN = os.getenv("TOKEN")
+BETA_TOKEN = os.getenv("BETA_TOKEN")
 
 
 @client.command(usage="load <extension>")

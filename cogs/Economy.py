@@ -11,7 +11,7 @@ from Market import start_turf_cm_amiibos, start_turf_extreme_cm_amiibos
 
 
 class Economy(commands.Cog):
-    def __init__(self, client):
+    def __init__(self, client: commands.Bot):
         self.client = client
 
     @commands.command(aliases=['currency', 'bal', 'money'], usage="balance [member]")
@@ -802,35 +802,35 @@ class Economy(commands.Cog):
         await sell_check(item_id, ctx, ctx.author, amount)
 
     # noinspection SpellCheckingInspection
-    @commands.command(aliases=['all-bmd', 'balances'], usage='bmdboard')
-    async def bmdboard(self, ctx: commands.Context):
-        """Shows all the balances ranked!"""
-
-        db = sqlite3.connect('curr.sqlite')
-        cursor = db.cursor()
-
-        cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {ctx.guild.id}')
-        enabled = cursor.fetchone()
-        if enabled and not enabled[0]:
-            return await ctx.send('Ay.. (Economy is currently disabled for this server..)')
-
-        cursor.execute(f'SELECT user_id, wallet, bank FROM curr ORDER BY (wallet+bank) DESC LIMIT 10')
-        data = cursor.fetchall()
-
-        if data:
-            bmdEmbed = nextcord.Embed(title='Ay! (Global Economy System Leaderboard!)', color=Colors.dark_grey, timestamp=ctx.message.created_at)
-            count = 0
-
-            for table in data:
-                count += 1
-                user = ctx.guild.get_member(table[0])
-
-                bmdEmbed.add_field(name=f'Ay! ({count}. {user.name + "#" + user.discriminator})',
-                                   value=f"*Ay* (**BMD Flow** : *{table[1] + table[2]}*)", inline=False)
-
-            bmdEmbed.set_footer(text=f"Ay! (Top 10 Results!)")
-            return await ctx.send(embed=bmdEmbed)
-        return await ctx.send("Ay.. (I can't seem to find anyone stored in my database for the economy leaderboard..)")
+    # @commands.command(aliases=['all-bmd', 'balances'], usage='bmdboard')
+    # async def bmdboard(self, ctx: commands.Context):
+    #     """Shows all the balances ranked!"""
+    #
+    #     db = sqlite3.connect('curr.sqlite')
+    #     cursor = db.cursor()
+    #
+    #     cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {ctx.guild.id}')
+    #     enabled = cursor.fetchone()
+    #     if enabled and not enabled[0]:
+    #         return await ctx.send('Ay.. (Economy is currently disabled for this server..)')
+    #
+    #     cursor.execute(f'SELECT user_id, wallet, bank FROM curr ORDER BY (wallet+bank) DESC LIMIT 10')
+    #     data = cursor.fetchall()
+    #
+    #     if data:
+    #         bmdEmbed = nextcord.Embed(title='Ay! (Global Economy System Leaderboard!)', color=Colors.dark_grey, timestamp=ctx.message.created_at)
+    #         count = 0
+    #
+    #         for table in data:
+    #             count += 1
+    #             user = ctx.guild.get_member(table[0])
+    #
+    #             bmdEmbed.add_field(name=f'Ay! ({count}. {user.name + "#" + user.discriminator})',
+    #                                value=f"*Ay* (**BMD Flow** : *{table[1] + table[2]}*)", inline=False)
+    #
+    #         bmdEmbed.set_footer(text=f"Ay! (Top 10 Results!)")
+    #         return await ctx.send(embed=bmdEmbed)
+    #     return await ctx.send("Ay.. (I can't seem to find anyone stored in my database for the economy leaderboard..)")
 
     # noinspection SpellCheckingInspection
     @commands.command(usage='reset')
