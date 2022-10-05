@@ -14,7 +14,7 @@ from googletrans import Translator
 from nextcord.ext import commands, application_checks
 
 import External
-from External import Variables, Colors, Emojis, Fonts, set_inv, gift_check, sell_check, start_turf, start_cheat, start_turf_extreme, start_blitz
+from External import Colors, Emojis, Fonts, set_inv, gift_check, sell_check, start_turf, start_cheat, start_turf_extreme, start_blitz
 from Interactions import Modals
 from Market import start_turf_extreme_cm_amiibos, start_turf_cm_amiibos, start_blitz_pm_amiibos
 
@@ -25,7 +25,7 @@ class Slash(commands.Cog):
 
     # region COMMON
 
-    @nextcord.slash_command(name="assistance", guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name="assistance")
     async def assistance_slash(self, interaction: nextcord.Interaction):
         """Help on all my command names!"""
         assistanceEmbed = nextcord.Embed(color=Colors.dark_grey, title="Ay! (Assistance!)",
@@ -41,7 +41,7 @@ class Slash(commands.Cog):
         await interaction.user.send(embed=assistanceEmbed)
         await interaction.send("Ay! (I messaged you my commands!)")
 
-    @nextcord.slash_command(name="command", guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name="command")
     async def command_slash(self, interaction: nextcord.Interaction, name):
         """Get further assistance on commands!"""
         command = self.client.get_command(name)
@@ -57,13 +57,13 @@ class Slash(commands.Cog):
 
         await interaction.send(embed=commandEmbed)
 
-    @nextcord.slash_command(name="request", guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name="request")
     @cooldowns.cooldown(1, 10, cooldowns.SlashBucket.author)
     async def request_slash(self, interaction: nextcord.Interaction):
         """Send feature request for me!"""
         await interaction.response.send_modal(Modals.RequestModal(self.client))
 
-    @nextcord.slash_command(name="bug", guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name="bug")
     @cooldowns.cooldown(1, 10, cooldowns.SlashBucket.author)
     async def bug_slash(self, interaction: nextcord.Interaction):
         """Send bug report for fixing!"""
@@ -81,7 +81,7 @@ class Slash(commands.Cog):
         if isinstance(error, cooldowns.CallableOnCooldown):
             return
 
-    @nextcord.slash_command(name='server-info', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='server-info')
     async def server_info_slash(self, interaction: nextcord.Interaction):
         """Sends info on the current server!"""
         guild = interaction.guild
@@ -120,7 +120,7 @@ class Slash(commands.Cog):
         serverEmbed.set_footer(text=f"Ay! (ID: {guild.id}!)")
         await interaction.send(embed=serverEmbed)
 
-    @nextcord.slash_command(name='user-info', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='user-info')
     async def user_info_slash(self, interaction: nextcord.Interaction, member: nextcord.Member = None):
         """Sends info on the user!"""
         if member is None:
@@ -188,7 +188,7 @@ class Slash(commands.Cog):
 
     # region ECONOMY
 
-    @nextcord.slash_command(name="balance", guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name="balance")
     async def balance_slash(self, interaction: nextcord.Interaction, member: nextcord.Member = None):
         """Check your balance!"""
         if member is None:
@@ -224,7 +224,7 @@ class Slash(commands.Cog):
 
         await interaction.send(embed=balanceEmbed)
 
-    @nextcord.slash_command(name='deposit', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='deposit')
     async def deposit_slash(self, interaction: nextcord.Interaction, amount: int = 50):
         """Deposit your BMD into the Big Man Bank! (0 for All)"""
         db = sqlite3.connect("curr.sqlite")
@@ -269,7 +269,7 @@ class Slash(commands.Cog):
         cursor.close()
         db.close()
 
-    @nextcord.slash_command(name='withdraw', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='withdraw')
     async def withdraw_slash(self, interaction: nextcord.Interaction, amount: int = 50):
         """Withdraw your BMD from the Big Man Bank! (0 for All)"""
         db = sqlite3.connect("curr.sqlite")
@@ -308,7 +308,7 @@ class Slash(commands.Cog):
         cursor.close()
         db.close()
 
-    @nextcord.slash_command(name='job', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='job')
     @cooldowns.cooldown(1, 1800, cooldowns.SlashBucket.author)
     async def job_slash(self, interaction: nextcord.Interaction):
         """Get a job! Make some BMD!"""
@@ -347,7 +347,7 @@ class Slash(commands.Cog):
         if isinstance(error, TypeError):
             return
 
-    @nextcord.slash_command(name='loan', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='loan')
     @cooldowns.cooldown(1, 10, cooldowns.SlashBucket.author)
     async def loan_slash(self, interaction: nextcord.Interaction, member: nextcord.Member, amount: int = 100):
         """Loan BMD to others!"""
@@ -395,7 +395,7 @@ class Slash(commands.Cog):
             return
 
     # noinspection SpellCheckingInspection
-    @nextcord.slash_command(name="turf", guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name="turf")
     @cooldowns.cooldown(1, 60, cooldowns.SlashBucket.author)
     async def turf_slash(self, interaction: nextcord.Interaction, amount: int = 85):
         """Play Turf War for BMD!"""
@@ -608,7 +608,7 @@ class Slash(commands.Cog):
         if isinstance(error, TypeError):
             return
 
-    @nextcord.slash_command(name='cheat', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='cheat')
     @cooldowns.cooldown(1, 120, cooldowns.SlashBucket.author)
     async def cheat_slash(self, interaction: nextcord.Interaction, member: nextcord.Member, amount: int = 500):
         """Cheat others for BMD?"""
@@ -702,7 +702,7 @@ class Slash(commands.Cog):
             return
 
     # noinspection SpellCheckingInspection
-    @nextcord.slash_command(name='extreme-turf', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='extreme-turf')
     @cooldowns.cooldown(1, 90, cooldowns.SlashBucket.author)
     async def extreme_turf_slash(self, interaction: nextcord.Interaction, amount: int = 135):
         """Play Extreme Turf War for BMD!"""
@@ -914,13 +914,13 @@ class Slash(commands.Cog):
         if isinstance(error, TypeError):
             return
 
-    @nextcord.slash_command(name='inventory', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='inventory')
     async def inventory_slash(self, interaction: nextcord.Interaction, member: nextcord.Member = None):
         """View inventories!"""
 
         await set_inv(member, interaction.user, interaction.created_at, interaction)
 
-    # @nextcord.slash_command(name='market', guild_ids=Variables.guild_ids)
+    # @nextcord.slash_command(name='market')
     # @cooldowns.cooldown(1, 5, cooldowns.SlashBucket.author)
     # async def market_slash(self, interaction: nextcord.Interaction):
     #     """View the Marketplace where you can spend BMD!"""
@@ -950,7 +950,7 @@ class Slash(commands.Cog):
     #     if isinstance(error, TypeError):
     #         return
 
-    @nextcord.slash_command(name='gift', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='gift')
     @cooldowns.cooldown(1, 8, cooldowns.SlashBucket.author)
     async def gift_slash(self, interaction: nextcord.Interaction, member: nextcord.Member, item_id: str, amount: int = 1):
         """Gift your items to others!"""
@@ -963,7 +963,7 @@ class Slash(commands.Cog):
         if isinstance(error, TypeError):
             return
 
-    @nextcord.slash_command(name='sell', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='sell')
     @cooldowns.cooldown(1, 8, cooldowns.SlashBucket.author)
     async def sell_slash(self, interaction: nextcord.Interaction, item_id: str, amount: int = 1):
         """Sell your items for BMD!"""
@@ -977,7 +977,7 @@ class Slash(commands.Cog):
             return
 
     # noinspection SpellCheckingInspection
-    # @nextcord.slash_command(name='bmdboard', guild_ids=Variables.guild_ids)
+    # @nextcord.slash_command(name='bmdboard')
     # async def bmdboard_slash(self, interaction: nextcord.Interaction):
     #     """Shows all the balances ranked!"""
     #
@@ -1011,7 +1011,7 @@ class Slash(commands.Cog):
 
     # region LEVELING
 
-    @nextcord.slash_command(name='level', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='level')
     async def level_slash(self, interaction: nextcord.Interaction, member: nextcord.Member = None):
         """View levels!"""
         if member is None:
@@ -1079,7 +1079,7 @@ class Slash(commands.Cog):
         db.close()
 
     # noinspection SpellCheckingInspection
-    @nextcord.slash_command(name='blitz', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='blitz')
     @cooldowns.cooldown(1, 180, cooldowns.SlashBucket.author)
     async def blitz_slash(self, interaction: nextcord.Interaction):
         """Play Experience Blitz for XP!"""
@@ -1221,7 +1221,7 @@ class Slash(commands.Cog):
             return
 
     # noinspection SpellCheckingInspection
-    @nextcord.slash_command(name='levelboard', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='levelboard')
     async def levelboard_slash(self, interaction: nextcord.Interaction):
         """Shows all the levels ranked!"""
 
@@ -1256,7 +1256,7 @@ class Slash(commands.Cog):
 
     # region MANAGEMENT
 
-    @nextcord.slash_command(name='system', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='system')
     async def system_slash(self, interaction: nextcord.Interaction):
         """Configure system-related commands!"""
         pass
@@ -1427,7 +1427,7 @@ class Slash(commands.Cog):
             mainCursor.close()
             mainDb.close()
 
-    @nextcord.slash_command(name='star-setup', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='star-setup')
     async def star_setup_slash(self):
         """Configure starboard-related commands!"""
         pass
@@ -1503,7 +1503,7 @@ class Slash(commands.Cog):
         cursor.close()
         db.close()
 
-    @nextcord.slash_command(name='clean-invites', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='clean-invites')
     @application_checks.has_permissions(manage_guild=True)
     @cooldowns.cooldown(1, 30, cooldowns.SlashBucket.guild)
     async def clean_invites_slash(self, interaction: nextcord.Interaction):
@@ -1534,7 +1534,7 @@ class Slash(commands.Cog):
         if isinstance(error, TypeError):
             return
 
-    @nextcord.slash_command(name='clean-roles', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='clean-roles')
     @application_checks.has_permissions(manage_roles=True)
     @cooldowns.cooldown(1, 30, cooldowns.SlashBucket.guild)
     async def clean_roles_slash(self, interaction: nextcord.Interaction):
@@ -1569,7 +1569,7 @@ class Slash(commands.Cog):
         if isinstance(error, TypeError):
             return
 
-    @nextcord.slash_command(name='kick', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='kick')
     @application_checks.has_permissions(kick_members=True)
     async def kick_slash(self, interaction: nextcord.Interaction, member: nextcord.Member, *, reason=None):
         """Kicks whoever needs to be kicked!"""
@@ -1585,7 +1585,7 @@ class Slash(commands.Cog):
         await member.kick(reason=reason)
         await interaction.send(embed=kickEmbed)
 
-    @nextcord.slash_command(name='ban', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='ban')
     @application_checks.has_permissions(ban_members=True)
     async def ban_slash(self, interaction: nextcord.Interaction, member: nextcord.Member, *, reason=None):
         """Bans whoever needs to be banned!"""
@@ -1601,7 +1601,7 @@ class Slash(commands.Cog):
         await member.ban(reason=reason)
         await interaction.send(embed=banEmbed)
 
-    @nextcord.slash_command(name='clear', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='clear')
     @application_checks.has_permissions(manage_messages=True)
     async def clear_slash(self, interaction: nextcord.Interaction, amount: int = 1):
         """Clears out messages!"""
@@ -1614,7 +1614,7 @@ class Slash(commands.Cog):
             await interaction.channel.purge(limit=amount)
             await interaction.send(f'Ay! (I have cleared out {amount} messages in this channel!)', delete_after=5)
 
-    @nextcord.slash_command(name='timeout', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='timeout')
     @application_checks.has_permissions(moderate_members=True)
     async def timeout_slash(self, interaction: nextcord.Interaction, member: nextcord.Member, time, *, reason=None):
         """Timeout members for duration of time!"""
@@ -1633,7 +1633,7 @@ class Slash(commands.Cog):
         await member.edit(timeout=nextcord.utils.utcnow()+datetime.timedelta(seconds=time), reason=reason)
         await interaction.send(f"Ay! (Timed out {member.mention} for **{round(time)} Seconds**! Reasoning can be viewed in audit log!)")
 
-    @nextcord.slash_command(name='de-timeout', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='de-timeout')
     @application_checks.has_permissions(moderate_members=True)
     async def de_timeout_slash(self, interaction: nextcord.Interaction, member: nextcord.Member, *, reason=None):
         """De-timeout members who have been timed out!"""
@@ -1650,7 +1650,7 @@ class Slash(commands.Cog):
 
     # region ENTERTAINMENT
 
-    @nextcord.slash_command(name='translate', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='translate')
     async def translate_slash(self, interaction: nextcord.Interaction, language: str, *, message: str):
         """Translate messages to another language!"""
         translator = Translator()
@@ -1665,7 +1665,7 @@ class Slash(commands.Cog):
 
         await interaction.send(embed=translateEmbed)
 
-    @nextcord.slash_command(name='8ball', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='8ball')
     async def _8ball_slash(self, interaction: nextcord.Interaction, *, message: str):
         """Ask questions! Get answers!"""
 
@@ -1693,7 +1693,7 @@ class Slash(commands.Cog):
 
         await interaction.send(embed=_8ballEmbed)
 
-    @nextcord.slash_command(name='reverse', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='reverse')
     async def reverse_slash(self, interaction: nextcord.Interaction, *, message: str):
         """Reverse messages to make them backwards!"""
 
@@ -1701,7 +1701,7 @@ class Slash(commands.Cog):
 
         await interaction.send(embed=reverseEmbed)
 
-    @nextcord.slash_command(name='youtube', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='youtube')
     async def youtube_slash(self, interaction: nextcord.Interaction, *, message: str):
         """Search for something on YouTube!"""
 
@@ -1712,7 +1712,7 @@ class Slash(commands.Cog):
                                     htm_content.read().decode())
         await interaction.send("Ay\n" + 'http://www.youtube.com/watch?v=' + search_results[0])
 
-    @nextcord.slash_command(name='cat', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='cat')
     async def cat_slash(self, interaction: nextcord.Interaction):
         """Look at images of cats!"""
         response = requests.get('https://some-random-api.ml/img/cat')
@@ -1725,7 +1725,7 @@ class Slash(commands.Cog):
         except:
             return await interaction.send("Ay.. (An error has occurred.. maybe try again later..)", ephemeral=True)
 
-    @nextcord.slash_command(name='dog', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='dog')
     async def dog_slash(self, interaction: nextcord.Interaction):
         """Look at images of dogs!"""
         response = requests.get('https://some-random-api.ml/img/dog')
@@ -1738,7 +1738,7 @@ class Slash(commands.Cog):
         except:
             return await interaction.send("Ay.. (An error has occurred.. maybe try again later..)", ephemeral=True)
 
-    @nextcord.slash_command(name='base64', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='base64')
     async def base64_slash(self, interaction: nextcord.Interaction, *, message: str):
         """Convert messages to Base64!"""
         response = requests.get('https://some-random-api.ml/base64?encode=' + message)
@@ -1751,7 +1751,7 @@ class Slash(commands.Cog):
         except:
             return await interaction.send("Ay.. (An error has occurred.. maybe try again later..", ephemeral=True)
 
-    @nextcord.slash_command(name='binary', guild_ids=Variables.guild_ids)
+    @nextcord.slash_command(name='binary')
     async def binary_slash(self, interaction: nextcord.Interaction, *, message: str):
         """Convert images to Binary!"""
         response = requests.get('https://some-random-api.ml/binary?encode=' + message)
