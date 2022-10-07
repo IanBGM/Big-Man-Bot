@@ -282,59 +282,59 @@ class Management(commands.Cog):
 
     # endregion
 
-    @commands.command(name="clean-invites", aliases=['delete-invites', 'del-invites'], usage='clean-invites')
-    @commands.cooldown(1, 30, commands.BucketType.guild)
-    @commands.has_permissions(manage_guild=True)
-    async def clean_invites(self, ctx):
-        """Clean all invites in the server!"""
-        await ctx.send("Ay? (Are you sure you want to clean all the invites?)")
-
-        def check(m):
-            return m.author == ctx.author and m.channel == ctx.channel
-
-        try:
-            response = await self.client.wait_for('message', check=check, timeout=30)
-        except asyncio.TimeoutError:
-            return await ctx.send('Ay.. (Sorry, you took too long to respond.. Carrying on!)')
-
-        if response.content.lower() not in ("yes", "y"):
-            return await ctx.send("Ay! (Operation Aborted!)")
-
-        msg = await ctx.send("Ay.. (Purging invites..)")
-
-        for invite in await ctx.guild.invites():
-            await invite.delete()
-
-        await msg.edit("Ay! (Operation Complete! All invites have been purged!)")
-
-    @commands.command(name="clean-roles", aliases=['delete-roles', 'del-roles'], usage='clean-roles')
-    @commands.cooldown(1, 30, commands.BucketType.guild)
-    @commands.has_permissions(manage_roles=True)
-    async def clean_roles(self, ctx):
-        """Clean all roles in the server!"""
-        await ctx.send("Ay? (Are you sure you want to clean all the roles?)")
-
-        def check(m):
-            return m.author == ctx.author and m.channel == ctx.channel
-
-        try:
-            response = await self.client.wait_for('message', check=check, timeout=30)
-        except asyncio.TimeoutError:
-            return await ctx.send('Ay.. (Sorry, you took too long to respond.. Carrying on!)')
-
-        if response.content.lower() not in ("yes", "y"):
-            return await ctx.send("Ay! (Operation Aborted!)")
-
-        msg = await ctx.send("Ay.. (Purging roles..)")
-
-        for role in ctx.guild.roles:
-            # noinspection PyBroadException
-            try:
-                await role.delete()
-            except:
-                continue
-
-        await msg.edit("Ay! (Operation Complete! All roles have been purged!)")
+    # @commands.command(name="clean-invites", aliases=['delete-invites', 'del-invites'], usage='clean-invites')
+    # @commands.cooldown(1, 30, commands.BucketType.guild)
+    # @commands.has_permissions(manage_guild=True)
+    # async def clean_invites(self, ctx):
+    #     """Clean all invites in the server!"""
+    #     await ctx.send("Ay? (Are you sure you want to clean all the invites?)")
+    #
+    #     def check(m):
+    #         return m.author == ctx.author and m.channel == ctx.channel
+    #
+    #     try:
+    #         response = await self.client.wait_for('message', check=check, timeout=30)
+    #     except asyncio.TimeoutError:
+    #         return await ctx.send('Ay.. (Sorry, you took too long to respond.. Carrying on!)')
+    #
+    #     if response.content.lower() not in ("yes", "y"):
+    #         return await ctx.send("Ay! (Operation Aborted!)")
+    #
+    #     msg = await ctx.send("Ay.. (Purging invites..)")
+    #
+    #     for invite in await ctx.guild.invites():
+    #         await invite.delete()
+    #
+    #     await msg.edit("Ay! (Operation Complete! All invites have been purged!)")
+    #
+    # @commands.command(name="clean-roles", aliases=['delete-roles', 'del-roles'], usage='clean-roles')
+    # @commands.cooldown(1, 30, commands.BucketType.guild)
+    # @commands.has_permissions(manage_roles=True)
+    # async def clean_roles(self, ctx):
+    #     """Clean all roles in the server!"""
+    #     await ctx.send("Ay? (Are you sure you want to clean all the roles?)")
+    #
+    #     def check(m):
+    #         return m.author == ctx.author and m.channel == ctx.channel
+    #
+    #     try:
+    #         response = await self.client.wait_for('message', check=check, timeout=30)
+    #     except asyncio.TimeoutError:
+    #         return await ctx.send('Ay.. (Sorry, you took too long to respond.. Carrying on!)')
+    #
+    #     if response.content.lower() not in ("yes", "y"):
+    #         return await ctx.send("Ay! (Operation Aborted!)")
+    #
+    #     msg = await ctx.send("Ay.. (Purging roles..)")
+    #
+    #     for role in ctx.guild.roles:
+    #         # noinspection PyBroadException
+    #         try:
+    #             await role.delete()
+    #         except:
+    #             continue
+    #
+    #     await msg.edit("Ay! (Operation Complete! All roles have been purged!)")
 
     @commands.command(aliases=['boot'], usage='kick <member> [reason]')
     @commands.has_permissions(kick_members=True)
