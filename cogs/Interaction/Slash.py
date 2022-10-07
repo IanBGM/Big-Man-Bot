@@ -1432,9 +1432,9 @@ class Slash(commands.Cog):
             mainDb.close()
 
     @nextcord.slash_command(name='star-setup')
-    async def star_setup_slash(self):
+    async def star_setup_slash(self, interaction: nextcord.Interaction):
         """Configure starboard-related commands!"""
-        pass
+        return await interaction.send("Ay! (Here are the Starboard Setup Commands: `channel, limit`)", ephemeral=True)
 
     @star_setup_slash.subcommand(name='channel')
     @application_checks.has_permissions(manage_guild=True)
@@ -1507,71 +1507,71 @@ class Slash(commands.Cog):
         cursor.close()
         db.close()
 
-    @nextcord.slash_command(name='clean-invites')
-    @application_checks.has_permissions(manage_guild=True)
-    @cooldowns.cooldown(1, 30, cooldowns.SlashBucket.guild)
-    async def clean_invites_slash(self, interaction: nextcord.Interaction):
-        """Clean all invites in the server!"""
-        await interaction.send("Ay? (Are you sure you want to clean all the invites?)")
-
-        def check(m):
-            return m.author == interaction.user and m.channel == interaction.channel
-
-        try:
-            response = await self.client.wait_for('message', check=check, timeout=30)
-        except asyncio.TimeoutError:
-            return await interaction.send('Ay.. (Sorry, you took too long to respond.. Carrying on!)')
-
-        if response.content.lower() not in ("yes", "y"):
-            return await interaction.send("Ay! (Operation Aborted!)", ephemeral=True)
-
-        msg = await interaction.send("Ay.. (Purging invites..)")
-
-        for invite in await interaction.guild.invites():
-            await invite.delete()
-
-        await msg.edit("Ay! (Operation Complete! All invites have been purged!)")
-
-    # noinspection PyUnusedLocal
-    @clean_invites_slash.error
-    async def clean_invites_error(self, ctx, error):
-        if isinstance(error, TypeError):
-            return
-
-    @nextcord.slash_command(name='clean-roles')
-    @application_checks.has_permissions(manage_roles=True)
-    @cooldowns.cooldown(1, 30, cooldowns.SlashBucket.guild)
-    async def clean_roles_slash(self, interaction: nextcord.Interaction):
-        """Clean all roles in the server!"""
-        await interaction.send("Ay? (Are you sure you want to clean all the roles?)")
-
-        def check(m):
-            return m.author == interaction.user and m.channel == interaction.channel
-
-        try:
-            response = await self.client.wait_for('message', check=check, timeout=30)
-        except asyncio.TimeoutError:
-            return await interaction.send('Ay.. (Sorry, you took too long to respond.. Carrying on!)')
-
-        if response.content.lower() not in ("yes", "y"):
-            return await interaction.send("Ay! (Operation Aborted!)", ephemeral=True)
-
-        msg = await interaction.send("Ay.. (Purging roles..)")
-
-        for role in interaction.guild.roles:
-            # noinspection PyBroadException
-            try:
-                await role.delete()
-            except:
-                continue
-
-        await msg.edit("Ay! (Operation Complete! All roles have been purged!)")
-
-    # noinspection PyUnusedLocal
-    @clean_roles_slash.error
-    async def clean_roles_error(self, ctx, error):
-        if isinstance(error, TypeError):
-            return
+    # @nextcord.slash_command(name='clean-invites')
+    # @application_checks.has_permissions(manage_guild=True)
+    # @cooldowns.cooldown(1, 30, cooldowns.SlashBucket.guild)
+    # async def clean_invites_slash(self, interaction: nextcord.Interaction):
+    #     """Clean all invites in the server!"""
+    #     await interaction.send("Ay? (Are you sure you want to clean all the invites?)")
+    #
+    #     def check(m):
+    #         return m.author == interaction.user and m.channel == interaction.channel
+    #
+    #     try:
+    #         response = await self.client.wait_for('message', check=check, timeout=30)
+    #     except asyncio.TimeoutError:
+    #         return await interaction.send('Ay.. (Sorry, you took too long to respond.. Carrying on!)')
+    #
+    #     if response.content.lower() not in ("yes", "y"):
+    #         return await interaction.send("Ay! (Operation Aborted!)", ephemeral=True)
+    #
+    #     msg = await interaction.send("Ay.. (Purging invites..)")
+    #
+    #     for invite in await interaction.guild.invites():
+    #         await invite.delete()
+    #
+    #     await msg.edit("Ay! (Operation Complete! All invites have been purged!)")
+    #
+    # # noinspection PyUnusedLocal
+    # @clean_invites_slash.error
+    # async def clean_invites_error(self, ctx, error):
+    #     if isinstance(error, TypeError):
+    #         return
+    #
+    # @nextcord.slash_command(name='clean-roles')
+    # @application_checks.has_permissions(manage_roles=True)
+    # @cooldowns.cooldown(1, 30, cooldowns.SlashBucket.guild)
+    # async def clean_roles_slash(self, interaction: nextcord.Interaction):
+    #     """Clean all roles in the server!"""
+    #     await interaction.send("Ay? (Are you sure you want to clean all the roles?)")
+    #
+    #     def check(m):
+    #         return m.author == interaction.user and m.channel == interaction.channel
+    #
+    #     try:
+    #         response = await self.client.wait_for('message', check=check, timeout=30)
+    #     except asyncio.TimeoutError:
+    #         return await interaction.send('Ay.. (Sorry, you took too long to respond.. Carrying on!)')
+    #
+    #     if response.content.lower() not in ("yes", "y"):
+    #         return await interaction.send("Ay! (Operation Aborted!)", ephemeral=True)
+    #
+    #     msg = await interaction.send("Ay.. (Purging roles..)")
+    #
+    #     for role in interaction.guild.roles:
+    #         # noinspection PyBroadException
+    #         try:
+    #             await role.delete()
+    #         except:
+    #             continue
+    #
+    #     await msg.edit("Ay! (Operation Complete! All roles have been purged!)")
+    #
+    # # noinspection PyUnusedLocal
+    # @clean_roles_slash.error
+    # async def clean_roles_error(self, ctx, error):
+    #     if isinstance(error, TypeError):
+    #         return
 
     @nextcord.slash_command(name='kick')
     @application_checks.has_permissions(kick_members=True)
