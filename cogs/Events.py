@@ -235,7 +235,7 @@ class Events(commands.Cog):
         if isinstance(error, sqlite3.OperationalError):
             return await interaction.send("Ay.. (Database is locked.. give me a moment..)", ephemeral=True)
         if isinstance(error, nextcord.ApplicationCheckFailure):
-            return await interaction.send("Ay!? (You/**I** don't have proper permission to use this!? Sorry I can't let you/myself use this command..)", ephemeral=True)
+            return await interaction.send("Ay!? (Something went wrong while using this command!? Possibly missing proper permissions.. it could be anything..)", ephemeral=True)
         if isinstance(error, ValueError):
             return await interaction.send('Ay.. (An error has occurred recently..)', ephemeral=True)
 
