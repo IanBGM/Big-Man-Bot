@@ -417,11 +417,12 @@ class Management(commands.Cog):
     async def cog_command_error(self, ctx, error):
 
         if isinstance(error, commands.MissingPermissions):
-            return await ctx.send(f"Ay!? (You don't have proper permission to use this!? Sorry I can't let you use this command.. I feel like you require `{error.missing_permissions}`..?)")
+            return await ctx.send(f"Ay!? (You don't have proper permission to use this!? Sorry I can't let you use this command.."
+                                  f"I feel like you require `" + ", ".join(error.missing_permissions) + "`..?)")
 
         if isinstance(error, commands.BotMissingPermissions):
             return await ctx.send(f"Ay!? (**I** don't have proper permission to use this!? Sorry I can't let myself use this command.. "
-                                  f"I feel like I require `{', '.join(error.missing_permissions)}`..?)")
+                                  f"I feel like I require `" + ", ".join(error.missing_permissions) + "`..?)")
 
         if isinstance(error, commands.MissingRequiredArgument):
             return await ctx.send(f'Ay!? (This command is missing arguments!? Use `manta cmd` to get arguments on commands!)')
