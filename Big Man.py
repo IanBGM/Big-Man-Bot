@@ -4,7 +4,7 @@ from nextcord.ext import commands
 from dotenv import load_dotenv, find_dotenv
 from loggerpy import Logger
 
-client = commands.Bot(command_prefix=commands.when_mentioned_or('manta '), intents=nextcord.Intents.all(), help_command=None)
+client = commands.Bot(command_prefix=commands.when_mentioned_or('beta '), intents=nextcord.Intents.all(), help_command=None)
 
 logger = Logger()
 load_dotenv(find_dotenv())
@@ -55,4 +55,4 @@ for filename in os.listdir('cogs/Interaction'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.Interaction.{filename[:-3]}')
 
-client.run(TOKEN)
+client.run(BETA_TOKEN)
