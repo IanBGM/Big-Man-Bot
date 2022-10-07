@@ -8,6 +8,11 @@ from nextcord.ext import commands
 from External import Colors, Emojis, set_inv, set_shop, gift_check, sell_check, start_turf, start_turf_extreme, start_cheat
 from Interactions import Selections, Paginations
 from Market import start_turf_cm_amiibos, start_turf_extreme_cm_amiibos
+from ext.Functions import EconomyFunc, MarketFunc, cursor, CURR_DB
+
+
+func = EconomyFunc
+mar_func = MarketFunc
 
 
 class Economy(commands.Cog):
@@ -20,28 +25,17 @@ class Economy(commands.Cog):
         if member is None:
             member = ctx.author
 
-        db = sqlite3.connect("curr.sqlite")
-        cursor = db.cursor()
-
         cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {ctx.guild.id}')
         enabled = cursor.fetchone()
         if enabled and not enabled[0]:
             return await ctx.send('Ay.. (Economy is currently disabled for this server..)')
 
-        cursor.execute(f"SELECT wallet, bank, max_bank FROM curr WHERE user_id = {member.id} ")
-        bal = cursor.fetchone()
-        # noinspection PyBroadException
-        try:
-            wallet = bal[0]
-            bank = bal[1]
-            max_bank = bal[2]
-        except:
-            wallet = 0
-            bank = 0
-            max_bank = 0
-
         if member.bot:
             return await ctx.send("Ay!? (That's a bot!?)")
+
+        wallet = func.check_wallet(member)
+        bank = func.check_bank(member)
+        max_bank = func.check_max(member)
 
         balanceEmbed = nextcord.Embed(colour=Colors.dark_grey, title=f"Ay! ({member.name} Balance!)", timestamp=ctx.message.created_at)
 
@@ -57,24 +51,14 @@ class Economy(commands.Cog):
     async def deposit(self, ctx, amount: int = 50):
         """Deposit your BMD into the Big Man Bank! (0 for All)"""
 
-        db = sqlite3.connect("curr.sqlite")
-        cursor = db.cursor()
-
         cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {ctx.guild.id}')
         enabled = cursor.fetchone()
         if enabled and not enabled[0]:
             return await ctx.send('Ay.. (Economy is currently disabled for this server..)')
 
-        cursor.execute(f"SELECT * FROM curr WHERE user_id = {ctx.author.id}")
-        data = cursor.fetchone()
-
-        # noinspection PyBroadException
-        try:
-            wallet = data[1]
-            bank = data[2]
-            max_bank = data[3]
-        except:
-            return await ctx.send("Ay.. (Something with wrong..)")
+        wallet = func.check_wallet(ctx.author, False)
+        bank = func.check_bank(ctx.author, False)
+        max_bank = func.check_max(ctx.author, False)
 
         if wallet is None or bank is None or max_bank is None:
             return await ctx.send("Ay.. (You don't have any economy data..)")
@@ -90,39 +74,28 @@ class Economy(commands.Cog):
             return await ctx.send("Ay.. (That amount goes over the Bank Capacity, you cannot deposit anymore BMD..)")
         else:
             if amount == 0 and not wallet + bank > max_bank:
-                cursor.execute("UPDATE curr SET bank = ? WHERE user_id = ?", (bank + wallet, ctx.author.id))
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet - wallet, ctx.author.id))
+                func.add_bank(ctx.author, wallet)
+                func.rem_wallet(ctx.author, wallet)
                 await ctx.send(f"Ay! (You have placed **all your BMD** in the Big Man Bank!)")
             else:
-                cursor.execute("UPDATE curr SET bank = ? WHERE user_id = ?", (bank + amount, ctx.author.id))
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet - amount, ctx.author.id))
+                func.add_bank(ctx.author, amount)
+                func.rem_wallet(ctx.author, amount)
                 await ctx.send(f"Ay! (You have placed **{amount} BMD** in the Big Man Bank!)")
 
-        db.commit()
-        cursor.close()
-        db.close()
+        CURR_DB.commit()
 
     @commands.command(aliases=['draw', 'take'], usage="withdraw [amount]")
     async def withdraw(self, ctx, amount: int = 50):
         """Withdraw your BMD from the Big Man Bank! (0 for All)"""
-        db = sqlite3.connect("curr.sqlite")
-        cursor = db.cursor()
 
         cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {ctx.guild.id}')
         enabled = cursor.fetchone()
         if enabled and not enabled[0]:
             return await ctx.send('Ay.. (Economy is currently disabled for this server..)')
-
-        cursor.execute(f"SELECT * FROM curr WHERE user_id = {ctx.author.id}")
-        data = cursor.fetchone()
-
-        # noinspection PyBroadException
-        try:
-            wallet = data[1]
-            bank = data[2]
-        except:
-            return await ctx.send("Ay.. (Something with wrong..)")
-
+        
+        wallet = func.check_wallet(ctx.author, False)
+        bank = func.check_bank(ctx.author, False)
+        
         if wallet is None or bank is None:
             return await ctx.send("Ay.. (You don't have any economy data..)")
 
@@ -133,25 +106,20 @@ class Economy(commands.Cog):
             return await ctx.send("Ay.. (Not enough BMD to withdraw)")
         else:
             if amount == 0:
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet + bank, ctx.author.id))
-                cursor.execute("UPDATE curr SET bank = ? WHERE user_id = ?", (bank - bank, ctx.author.id))
+                func.add_wallet(ctx.author, bank)
+                func.rem_bank(ctx.author, bank)
                 await ctx.send(f"Ay! (You have took **all your BMD** from the Big Man Bank!)")
             else:
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet + amount, ctx.author.id))
-                cursor.execute("UPDATE curr SET bank = ? WHERE user_id = ?", (bank - amount, ctx.author.id))
+                func.add_wallet(ctx.author, amount)
+                func.rem_bank(ctx.author, amount)
                 await ctx.send(f"Ay! (You have took **{amount} BMD** from the Big Man Bank!)")
 
-        db.commit()
-        cursor.close()
-        db.close()
+        CURR_DB.commit()
 
     @commands.command(aliases=['work', 'earn'], usage="job")
     @commands.cooldown(1, 1800, commands.BucketType.user)
     async def job(self, ctx):
         """Get a job! Make some BMD!"""
-        db = sqlite3.connect("curr.sqlite")
-        cursor = db.cursor()
-
         cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {ctx.guild.id}')
         enabled = cursor.fetchone()
         if enabled and not enabled[0]:
@@ -159,53 +127,29 @@ class Economy(commands.Cog):
 
         bmd_earned = random.randint(1, 100)
 
-        cursor.execute(f"SELECT wallet FROM curr WHERE user_id = {ctx.author.id}")
-        wallet = cursor.fetchone()
-
-        # noinspection PyBroadException
-        try:
-            wallet = wallet[0]
-        except:
-            wallet = 0
+        wallet = func.check_wallet(ctx.author, False)
 
         if wallet is None:
             return await ctx.send("Ay.. (You don't have any economy data..)")
 
-        sql = "UPDATE curr SET wallet = ? WHERE user_id = ?"
-        val = wallet + int(bmd_earned), ctx.author.id
-        cursor.execute(sql, val)
+        func.add_wallet(ctx.author, int(bmd_earned))
 
         await ctx.reply(f"Ay! (You earned **{bmd_earned} BMD**! Spend it wisely!)", mention_author=False)
-
-        db.commit()
-        cursor.close()
-        db.close()
+        CURR_DB.commit()
 
     @commands.command(aliases=['give'], usage="loan <member> [amount]")
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def loan(self, ctx, member: nextcord.Member, amount: int = 100):
         """Loan BMD to others!"""
         member = member
-        db = sqlite3.connect("curr.sqlite")
-        cursor = db.cursor()
 
         cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {ctx.guild.id}')
         enabled = cursor.fetchone()
         if enabled and not enabled[0]:
             return await ctx.send('Ay.. (Economy is currently disabled for this server..)')
 
-        cursor.execute(f"SELECT wallet FROM curr WHERE user_id = {ctx.author.id}")
-        wallet = cursor.fetchone()
-        cursor.execute(f"SELECT wallet FROM curr WHERE user_id = {member.id}")
-        memWallet = cursor.fetchone()
-
-        # noinspection PyBroadException
-        try:
-            wallet = wallet[0]
-            memWallet = memWallet[0]
-        except:
-            wallet = wallet
-            memWallet = memWallet
+        wallet = func.check_wallet(ctx.author, False)
+        memWallet = func.check_wallet(member, False)
 
         if member.bot:
             return await ctx.send("Ay!? (That's a bot!?)")
@@ -223,14 +167,13 @@ class Economy(commands.Cog):
             return await ctx.send("Ay.. (Sorry, 100 or above to send BMD to others..)")
 
         if amount == 0:
-            cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet - wallet, ctx.author.id))
-            cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (memWallet + wallet, member.id))
+            func.rem_wallet(ctx.author, wallet)
+            func.add_wallet(member, wallet)
         else:
-            cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet - amount, ctx.author.id))
-            cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (memWallet + amount, member.id))
-        db.commit()
-        cursor.close()
-        db.close()
+            func.rem_wallet(ctx.author, amount)
+            func.add_wallet(member, amount)
+
+        CURR_DB.commit()
 
         await ctx.send(f"Ay! (You have sent **{amount} BMD** to {member.mention})")
 
@@ -239,22 +182,17 @@ class Economy(commands.Cog):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def turf(self, ctx, amount: int = 85):
         """Play Turf War for BMD!"""
-        db = sqlite3.connect("curr.sqlite")
-        cursor = db.cursor()
 
         cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {ctx.guild.id}')
         enabled = cursor.fetchone()
         if enabled and not enabled[0]:
             return await ctx.send('Ay.. (Economy is currently disabled for this server..)')
-
-        cursor.execute(f"SELECT wallet FROM curr WHERE user_id = {ctx.author.id}")
-        wallet = cursor.fetchone()
-        cursor.execute(f"SELECT * FROM inv WHERE user_id = {ctx.author.id}")
-        item = cursor.fetchone()
+        
+        wallet = func.check_wallet(ctx.author, False)
+        item = mar_func.check_all_inv(ctx.author)
 
         # noinspection PyBroadException
         try:
-            wallet = wallet[0]
             cm_amiibos = item[2]
             shooters = item[4]
             rollers = item[5]
@@ -266,7 +204,6 @@ class Economy(commands.Cog):
             sloshers = item[11]
             brellas = item[12]
         except:
-            wallet = wallet
             cm_amiibos = item
             shooters = item
             rollers = item
@@ -338,30 +275,30 @@ class Economy(commands.Cog):
             # region WIN_CHECKS
 
             if cm_amiibos > 0:
-                cursor.execute("UPDATE inv SET cm_amiibos = ? WHERE user_id = ?", (cm_amiibos - 1, ctx.author.id))
+                mar_func.rem_item('cm_amiibos', ctx.author, 1)
             if shooters > 0:
-                cursor.execute("UPDATE inv SET shooters = ? WHERE user_id = ?", (shooters - 1, ctx.author.id))
+                mar_func.rem_item('shooters', ctx.author, 1)
             if rollers > 0:
-                cursor.execute("UPDATE inv SET rollers = ? WHERE user_id = ?", (rollers - 1, ctx.author.id))
+                mar_func.rem_item('rollers', ctx.author, 1)
             if splatlings > 0:
-                cursor.execute("UPDATE inv SET splatlings = ? WHERE user_id = ?", (splatlings - 1, ctx.author.id))
+                mar_func.rem_item('splatlings', ctx.author, 1)
             if blasters > 0:
-                cursor.execute("UPDATE inv SET blasters = ? WHERE user_id = ?", (blasters - 1, ctx.author.id))
+                mar_func.rem_item('blasters', ctx.author, 1)
             if brushes > 0:
-                cursor.execute("UPDATE inv SET brushes = ? WHERE user_id = ?", (brushes - 1, ctx.author.id))
+                mar_func.rem_item('brushes', ctx.author, 1)
             if dualies > 0:
-                cursor.execute("UPDATE inv SET dualies = ? WHERE user_id = ?", (dualies - 1, ctx.author.id))
+                mar_func.rem_item('dualies', ctx.author, 1)
             if chargers > 0:
-                cursor.execute("UPDATE inv SET chargers = ? WHERE user_id = ?", (chargers - 1, ctx.author.id))
-            if sloshers > 0:
-                cursor.execute("UPDATE inv SET sloshers = ? WHERE user_id = ?", (sloshers - 1, ctx.author.id))
+                mar_func.rem_item('chargers', ctx.author, 1)
+            if chargers > 0:
+                mar_func.rem_item('chargers', ctx.author, 1)
             if brellas > 0:
-                cursor.execute("UPDATE inv SET brellas = ? WHERE user_id = ?", (brellas - 1, ctx.author.id))
+                mar_func.rem_item('brellas', ctx.author, 1)
 
             # endregion
 
-            cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet + bmd_won, ctx.author.id))
-            db.commit()
+            func.add_wallet(ctx.author, bmd_won)
+            CURR_DB.commit()
 
             winEmbed = nextcord.Embed(color=Colors.dark_grey, title=f"{Emojis.something_man} Ay! (You win the Turf Battle!) {Emojis.dancing_man}",
                                       description=f"Ay! (Please enjoy the **{bmd_won} BMD** you won! Use it wisely!)", timestamp=ctx.message.created_at)
@@ -369,8 +306,6 @@ class Economy(commands.Cog):
             winEmbed.add_field(name=f"Opponent Percentage", value=f"*{round(opponent_final, 1)}%*")
 
             await ctx.reply(embed=winEmbed, mention_author=False)
-            cursor.close()
-            db.close()
 
         elif user_chance < opponent_chance:
             percent = random.randint(85, 145)
@@ -382,28 +317,28 @@ class Economy(commands.Cog):
             # region LOSE_CHECKS
 
             if shooters > 0:
-                cursor.execute("UPDATE inv SET shooters = ? WHERE user_id = ?", (shooters - 1, ctx.author.id))
+                mar_func.rem_item('shooters', ctx.author, 1)
             if rollers > 0:
-                cursor.execute("UPDATE inv SET rollers = ? WHERE user_id = ?", (rollers - 1, ctx.author.id))
+                mar_func.rem_item('rollers', ctx.author, 1)
             if splatlings > 0:
-                cursor.execute("UPDATE inv SET splatlings = ? WHERE user_id = ?", (splatlings - 1, ctx.author.id))
+                mar_func.rem_item('splatlings', ctx.author, 1)
             if blasters > 0:
-                cursor.execute("UPDATE inv SET blasters = ? WHERE user_id = ?", (blasters - 1, ctx.author.id))
+                mar_func.rem_item('blasters', ctx.author, 1)
             if brushes > 0:
-                cursor.execute("UPDATE inv SET brushes = ? WHERE user_id = ?", (brushes - 1, ctx.author.id))
+                mar_func.rem_item('brushes', ctx.author, 1)
             if dualies > 0:
-                cursor.execute("UPDATE inv SET dualies = ? WHERE user_id = ?", (dualies - 1, ctx.author.id))
+                mar_func.rem_item('dualies', ctx.author, 1)
             if chargers > 0:
-                cursor.execute("UPDATE inv SET chargers = ? WHERE user_id = ?", (chargers - 1, ctx.author.id))
-            if sloshers > 0:
-                cursor.execute("UPDATE inv SET sloshers = ? WHERE user_id = ?", (sloshers - 1, ctx.author.id))
+                mar_func.rem_item('chargers', ctx.author, 1)
+            if chargers > 0:
+                mar_func.rem_item('chargers', ctx.author, 1)
             if brellas > 0:
-                cursor.execute("UPDATE inv SET brellas = ? WHERE user_id = ?", (brellas - 1, ctx.author.id))
+                mar_func.rem_item('brellas', ctx.author, 1)
 
             # endregion
 
-            cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet - bmd_lost, ctx.author.id))
-            db.commit()
+            func.rem_wallet(ctx.author, bmd_lost)
+            CURR_DB.commit()
 
             lostEmbed = nextcord.Embed(color=Colors.dark_grey, title=f"Ay.. (You lost the Turf Battle..)",
                                        description=f"Ay.. (Better luck next time.. you lost **{bmd_lost} BMD**.)", timestamp=ctx.message.created_at)
@@ -411,65 +346,49 @@ class Economy(commands.Cog):
             lostEmbed.add_field(name=f"Opponent Percentage", value=f"*{round(opponent_final, 1)}%*")
 
             await ctx.reply(embed=lostEmbed, mention_author=False)
-            cursor.close()
-            db.close()
 
         else:
 
             # region TIE_CHECKS
 
             if shooters > 0:
-                cursor.execute("UPDATE inv SET shooters = ? WHERE user_id = ?", (shooters - 1, ctx.author.id))
+                mar_func.rem_item('shooters', ctx.author, 1)
             if rollers > 0:
-                cursor.execute("UPDATE inv SET rollers = ? WHERE user_id = ?", (rollers - 1, ctx.author.id))
+                mar_func.rem_item('rollers', ctx.author, 1)
             if splatlings > 0:
-                cursor.execute("UPDATE inv SET splatlings = ? WHERE user_id = ?", (splatlings - 1, ctx.author.id))
+                mar_func.rem_item('splatlings', ctx.author, 1)
             if blasters > 0:
-                cursor.execute("UPDATE inv SET blasters = ? WHERE user_id = ?", (blasters - 1, ctx.author.id))
+                mar_func.rem_item('blasters', ctx.author, 1)
             if brushes > 0:
-                cursor.execute("UPDATE inv SET brushes = ? WHERE user_id = ?", (brushes - 1, ctx.author.id))
+                mar_func.rem_item('brushes', ctx.author, 1)
             if dualies > 0:
-                cursor.execute("UPDATE inv SET dualies = ? WHERE user_id = ?", (dualies - 1, ctx.author.id))
+                mar_func.rem_item('dualies', ctx.author, 1)
             if chargers > 0:
-                cursor.execute("UPDATE inv SET chargers = ? WHERE user_id = ?", (chargers - 1, ctx.author.id))
-            if sloshers > 0:
-                cursor.execute("UPDATE inv SET sloshers = ? WHERE user_id = ?", (sloshers - 1, ctx.author.id))
+                mar_func.rem_item('chargers', ctx.author, 1)
+            if chargers > 0:
+                mar_func.rem_item('chargers', ctx.author, 1)
             if brellas > 0:
-                cursor.execute("UPDATE inv SET brellas = ? WHERE user_id = ?", (brellas - 1, ctx.author.id))
+                mar_func.rem_item('brellas', ctx.author, 1)
 
             # endregion
 
             tieEmbed = nextcord.Embed(color=Colors.dark_grey, title=f"Ay!? (No one won the Turf Battle! Tie!)",
                                       description=f"Ay (It was a tie, come back whenever you want!)", timestamp=ctx.message.created_at)
             await ctx.reply(embed=tieEmbed, mention_author=False)
-            cursor.close()
-            db.close()
 
     @commands.command(usage='cheat <member> [amount]')
     @commands.cooldown(1, 120, commands.BucketType.user)
     async def cheat(self, ctx, member: nextcord.Member, amount: int = 500):
         """Cheat others for BMD?"""
         member = member
-        db = sqlite3.connect("curr.sqlite")
-        cursor = db.cursor()
 
         cursor.execute(f'SELECT enabled FROM system WHERE guild_id = {ctx.guild.id}')
         enabled = cursor.fetchone()
         if enabled and not enabled[0]:
             return await ctx.send('Ay.. (Economy is currently disabled for this server..)')
 
-        cursor.execute(f"SELECT wallet FROM curr WHERE user_id = {ctx.author.id}")
-        wallet = cursor.fetchone()
-        cursor.execute(f"SELECT wallet FROM curr WHERE user_id = {member.id}")
-        memWallet = cursor.fetchone()
-
-        # noinspection PyBroadException
-        try:
-            wallet = wallet[0]
-            memWallet = memWallet[0]
-        except:
-            wallet = wallet
-            memWallet = memWallet
+        wallet = func.check_wallet(ctx.author, False)
+        memWallet = func.check_wallet(member, False)
 
         if member.bot:
             return await ctx.send("Ay!? (That's a bot!?)")
@@ -496,12 +415,12 @@ class Economy(commands.Cog):
 
         if user_chance > member_chance:
             if amount == 0:
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet + memWallet, ctx.author.id))
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (memWallet - memWallet, member.id))
+                func.add_wallet(ctx.author, memWallet)
+                func.rem_wallet(member, memWallet)
             else:
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet + amount, ctx.author.id))
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (memWallet - amount, member.id))
-            db.commit()
+                func.add_wallet(ctx.author, amount)
+                func.rem_wallet(member, amount)
+            CURR_DB.commit()
 
             if amount == 0:
                 takeEmbed = nextcord.Embed(color=Colors.dark_grey, title=f":question: Ay..? (You cheated them successfully..?) :question:",
@@ -511,17 +430,15 @@ class Economy(commands.Cog):
                                            description=f"Ay? (Enjoy the **{amount} BMD** you took? *Dials 911-SP3*)", timestamp=ctx.message.created_at)
 
             await ctx.reply(embed=takeEmbed, mention_author=False)
-            cursor.close()
-            db.close()
 
         elif user_chance < member_chance:
             if amount == 0:
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (memWallet + memWallet, member.id))
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet - memWallet, ctx.author.id))
+                func.add_wallet(member, memWallet)
+                func.rem_wallet(ctx.author, memWallet)
             else:
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (memWallet + amount, member.id))
-                cursor.execute("UPDATE curr SET wallet = ? WHERE user_id = ?", (wallet - amount, ctx.author.id))
-            db.commit()
+                func.add_wallet(member, amount)
+                func.rem_wallet(ctx.author, amount)
+            CURR_DB.commit()
 
             if amount == 0:
                 caughtEmbed = nextcord.Embed(color=Colors.dark_grey, title=f"Ay..? (You got caught..?)",
@@ -531,15 +448,11 @@ class Economy(commands.Cog):
                                              description=f"Ay.. (See you later.. you were fined **{amount} BMD**. {member.name} has claimed this..)", timestamp=ctx.message.created_at)
 
             await ctx.reply(embed=caughtEmbed, mention_author=False)
-            cursor.close()
-            db.close()
 
         else:
             homeEmbed = nextcord.Embed(color=Colors.dark_grey, title=f"Ay!? (You went back home!?)",
                                        description=f"Ay!? (You went back home and decided not to cheat someone!?)", timestamp=ctx.message.created_at)
             await ctx.reply(embed=homeEmbed, mention_author=False)
-            cursor.close()
-            db.close()
 
     # noinspection SpellCheckingInspection
     @commands.command(name='extreme-turf', aliases=['extreme-turf-war', 'extreme-war'], usage='extreme-turf [amount]')
