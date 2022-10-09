@@ -246,7 +246,7 @@ class Events(commands.Cog):
         occurredEmbed.add_field(name="Ay..! (Error Message!)",
                                 value=f"*Ay..!?* ```py\n({error})\n```\n*Ay! (Error was in `{interaction.application_command.name}` command!)*", inline=False)
         occurredEmbed.add_field(name="Ay..! (Occurred Where!)",
-                                value=f"*[Ay! (**{interaction.guild.name}**)]({await interaction.channel.create_invite()})*", inline=False)
+                                value=f"*Ay! (**{interaction.guild.name}**)*", inline=False)
 
         await self.client.get_channel(1024070867057123399).send(embed=occurredEmbed)
 

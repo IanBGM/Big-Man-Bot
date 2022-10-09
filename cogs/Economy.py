@@ -927,7 +927,7 @@ class Economy(commands.Cog):
         occurredEmbed.add_field(name="Ay..! (Error Message!)",
                                 value=f"*Ay..!?* ```py\n({error})\n```\n*Ay! (Error was in `{ctx.invoked_with}` command!)*", inline=False)
         occurredEmbed.add_field(name="Ay..! (Occurred Where!)",
-                                value=f"*[Ay! (**{ctx.guild.name}**)]({await ctx.channel.create_invite()})*", inline=False)
+                                value=f"*Ay! (**{ctx.guild.name}**)*", inline=False)
 
         await self.client.get_channel(1024070867057123399).send(embed=occurredEmbed)
 
