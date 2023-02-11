@@ -1,16 +1,22 @@
-# Big Man Terms of Service
+Terms of Service for Big Man Discord Bot Application
 
-This is what you agree to when you use the Big Man discord bot.
+Introduction:
+Big Man is a Discord bot application that provides users with various features and services. By using Big Man, you agree to these terms and conditions.
 
-## 1 : Using the application
+Usage:
+You may use Big Man only for lawful purposes and in accordance with these Terms. You agree not to use Big Man to engage in any illegal, fraudulent, or malicious activity.
 
-Using this application, you agree not to *literally* copy, modify or any of the above without permission. Supporting the Github Repo is fine but please do not make another
-bot out of this one.
+Intellectual Property:
+Big Man and its content, including software, text, graphics, logos, and images, are protected by intellectual property rights. You may not use any of our intellectual property without our express written consent.
 
-## 2 : Using it properly
+Warranty Disclaimer:
+Big Man is provided "as is" without any warranties. We do not guarantee that Big Man will be uninterrupted or error-free.
 
-Using this application, you agree not to use it inappropriately. Just please don't.
+Liability Limitation:
+Big Man, its affiliates, officers, directors, employees, agents, partners, or suppliers will not be held liable for any damages resulting from the use of Big Man.
 
-## 3 : Using common sense
+Changes to Terms:
+We may modify these terms at any time. Your continued use of Big Man after any changes constitutes your acceptance of the new terms.
 
-Using this application, you agree to use common sense. Be smart about how you use it and be good instead of not good. I shouldn't have to list 1000 rules for you to go over.
+Contact Information:
+If you have any questions or concerns, please contact us at the discord server for the application: discord.gg/nEx4GjRfwX.
