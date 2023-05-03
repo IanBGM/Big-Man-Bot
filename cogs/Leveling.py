@@ -308,6 +308,7 @@ class Leveling(commands.Cog):
         db.close()
 
     # noinspection SpellCheckingInspection
+    '''
     @commands.command(aliases=['all-levels', 'levels'], usage='levelboard')
     async def levelboard(self, ctx: commands.Context):
         """Shows all the levels ranked!"""
@@ -339,6 +340,7 @@ class Leveling(commands.Cog):
             levelEmbed.set_footer(text=f"Ay! (Top 10 Results!)")
             return await ctx.send(embed=levelEmbed)
         return await ctx.send("Ay.. (I can't seem to find anyone stored in my database for the leveling leaderboard..)")
+        '''
 
     async def cog_command_error(self, ctx, error):
 
