@@ -331,7 +331,7 @@ class Leveling(commands.Cog):
 
             for table in data:
                 count += 1
-                user = self.client.get_user(table[0])
+                user = ctx.guild.get_member(table[0])
 
                 levelEmbed.add_field(name=f'Ay! ({count}. {user.name + "#" + user.discriminator})',
                                      value=f"*Ay* (**Level** : *{table[1]}* | **XP** : *{table[2]} / {table[1] * 30}*)", inline=False)
