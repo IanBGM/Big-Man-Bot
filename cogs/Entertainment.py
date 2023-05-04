@@ -79,7 +79,7 @@ class Entertainment(commands.Cog):
     @commands.command(usage='cat')
     async def cat(self, ctx):
         """Look at images of cats!"""
-        response = requests.get('https://some-random-api.ml/img/cat')
+        response = requests.get('https://some-random-api.com/img/cat')
         data = response.json()
         # noinspection PyBroadException
         try:
@@ -92,7 +92,7 @@ class Entertainment(commands.Cog):
     @commands.command(usage='dog')
     async def dog(self, ctx):
         """Look at images of dogs!"""
-        response = requests.get('https://some-random-api.ml/img/dog')
+        response = requests.get('https://some-random-api.com/img/dog')
         data = response.json()
         # noinspection PyBroadException
         try:
@@ -105,7 +105,7 @@ class Entertainment(commands.Cog):
     @commands.command(aliases=['base'], usage='base64 <message>')
     async def base64(self, ctx, *, message: str):
         """Convert messages to Base64!"""
-        response = requests.get('https://some-random-api.ml/base64?encode=' + message)
+        response = requests.get('https://some-random-api.com/base64?encode=' + message)
         data = response.json()
         # noinspection PyBroadException
         try:
@@ -118,7 +118,7 @@ class Entertainment(commands.Cog):
     @commands.command(usage='binary <message>')
     async def binary(self, ctx, *, message: str):
         """Convert images to Binary!"""
-        response = requests.get('https://some-random-api.ml/binary?encode=' + message)
+        response = requests.get('https://some-random-api.com/binary?encode=' + message)
         data = response.json()
         # noinspection PyBroadException
         try:

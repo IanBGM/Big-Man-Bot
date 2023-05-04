@@ -1719,7 +1719,7 @@ class Slash(commands.Cog):
     @nextcord.slash_command(name='cat')
     async def cat_slash(self, interaction: nextcord.Interaction):
         """Look at images of cats!"""
-        response = requests.get('https://some-random-api.ml/img/cat')
+        response = requests.get('https://some-random-api.com/img/cat')
         data = response.json()
         # noinspection PyBroadException
         try:
@@ -1732,7 +1732,7 @@ class Slash(commands.Cog):
     @nextcord.slash_command(name='dog')
     async def dog_slash(self, interaction: nextcord.Interaction):
         """Look at images of dogs!"""
-        response = requests.get('https://some-random-api.ml/img/dog')
+        response = requests.get('https://some-random-api.com/img/dog')
         data = response.json()
         # noinspection PyBroadException
         try:
@@ -1745,7 +1745,7 @@ class Slash(commands.Cog):
     @nextcord.slash_command(name='base64')
     async def base64_slash(self, interaction: nextcord.Interaction, *, message: str):
         """Convert messages to Base64!"""
-        response = requests.get('https://some-random-api.ml/base64?encode=' + message)
+        response = requests.get('https://some-random-api.com/base64?encode=' + message)
         data = response.json()
         # noinspection PyBroadException
         try:
@@ -1758,7 +1758,7 @@ class Slash(commands.Cog):
     @nextcord.slash_command(name='binary')
     async def binary_slash(self, interaction: nextcord.Interaction, *, message: str):
         """Convert images to Binary!"""
-        response = requests.get('https://some-random-api.ml/binary?encode=' + message)
+        response = requests.get('https://some-random-api.com/binary?encode=' + message)
         data = response.json()
         # noinspection PyBroadException
         try:
