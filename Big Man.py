@@ -4,7 +4,14 @@ from nextcord.ext import commands
 from dotenv import load_dotenv, find_dotenv
 from loggerpy import Logger
 
-client = commands.Bot(command_prefix=commands.when_mentioned_or('manta '), intents=nextcord.Intents.all(), help_command=None)
+intents = nextcord.Intents(
+    guilds=True,
+    members=True,
+    messages=True,
+    message_content=True
+)
+
+client = commands.Bot(command_prefix=commands.when_mentioned_or('manta '), intents=intents, help_command=None)
 
 logger = Logger()
 load_dotenv(find_dotenv())
