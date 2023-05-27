@@ -116,49 +116,49 @@ class Common(commands.Cog):
             member = ctx.author
 
         # noinspection PyBroadException
-        try:
-            user_data = {
-                "Name": f"\"{member.name}\"",
-                "Nickname": f"\"{member.nick}\"",
-                "Discriminator": f"{member.discriminator}",
-                "Activity": f"\"{member.activities[0].name}\"",
-                "Roles": f"{len(member.roles)}",
-                "Joined Time": f"{member.joined_at.strftime('%b %d, %Y, %T')}",
-                "Creation Time": f"{member.created_at.strftime('%b %d, %Y, %T')}"
-            }
-        except:
-            user_data = {
-                "Name": f"\"{member.name}\"",
-                "Nickname": f"\"{member.nick}\"",
-                "Discriminator": f"{member.discriminator}",
-                "Roles": f"{len(member.roles)}",
-                "Joined Time": f"{member.joined_at.strftime('%b %d, %Y, %T')}",
-                "Creation Time": f"{member.created_at.strftime('%b %d, %Y, %T')}"
-            }
+        # try:
+        user_data = {
+            "Name": f"\"{member.name}\"",
+            "Nickname": f"\"{member.nick}\"",
+            "Discriminator": f"{member.discriminator}",
+            # "Activity": f"\"{member.activities[0].name}\"",
+            "Roles": f"{len(member.roles)}",
+            "Joined Time": f"{member.joined_at.strftime('%b %d, %Y, %T')}",
+            "Creation Time": f"{member.created_at.strftime('%b %d, %Y, %T')}"
+        }
+        # except:
+        #     user_data = {
+        #         "Name": f"\"{member.name}\"",
+        #         "Nickname": f"\"{member.nick}\"",
+        #         "Discriminator": f"{member.discriminator}",
+        #         "Roles": f"{len(member.roles)}",
+        #         "Joined Time": f"{member.joined_at.strftime('%b %d, %Y, %T')}",
+        #         "Creation Time": f"{member.created_at.strftime('%b %d, %Y, %T')}"
+        #     }
 
         # noinspection PyBroadException
-        try:
-            userEmbed = nextcord.Embed(color=Colors.dark_grey, timestamp=ctx.message.created_at,
-                                       description=f"Ay ```\n"
-                                                   f"(\nName : {user_data['Name']}\n\n"
-                                                   f"Nickname : {user_data['Nickname']}\n\n"
-                                                   f"Discriminator : {user_data['Discriminator']}\n\n"
-                                                   f"Activity : {user_data['Activity']}\n\n"
-                                                   f"Roles : {user_data['Roles']}\n\n"
-                                                   f"Joined Time : {user_data['Joined Time']}\n\n"
-                                                   f"Creation Time : {user_data['Creation Time']}\n)\n\n"
-                                                   f"\n```")
-        except:
-            userEmbed = nextcord.Embed(color=Colors.dark_grey, timestamp=ctx.message.created_at,
-                                       description=f"Ay ```\n"
-                                                   f"(\nName : {user_data['Name']}\n\n"
-                                                   f"Nickname : {user_data['Nickname']}\n\n"
-                                                   f"Discriminator : {user_data['Discriminator']}\n\n"
-                                                   f"Activity : None\n\n"
-                                                   f"Roles : {user_data['Roles']}\n\n"
-                                                   f"Joined Time : {user_data['Joined Time']}\n\n"
-                                                   f"Creation Time : {user_data['Creation Time']}\n)\n\n"
-                                                   f"\n```")
+        # try:
+        userEmbed = nextcord.Embed(color=Colors.dark_grey, timestamp=ctx.message.created_at,
+                                    description=f"Ay ```\n"
+                                                f"(\nName : {user_data['Name']}\n\n"
+                                                f"Nickname : {user_data['Nickname']}\n\n"
+                                                f"Discriminator : {user_data['Discriminator']}\n\n"
+                                                # f"Activity : {user_data['Activity']}\n\n"
+                                                f"Roles : {user_data['Roles']}\n\n"
+                                                f"Joined Time : {user_data['Joined Time']}\n\n"
+                                                f"Creation Time : {user_data['Creation Time']}\n)\n\n"
+                                                f"\n```")
+        # except:
+        #     userEmbed = nextcord.Embed(color=Colors.dark_grey, timestamp=ctx.message.created_at,
+        #                                description=f"Ay ```\n"
+        #                                            f"(\nName : {user_data['Name']}\n\n"
+        #                                            f"Nickname : {user_data['Nickname']}\n\n"
+        #                                            f"Discriminator : {user_data['Discriminator']}\n\n"
+        #                                            f"Activity : None\n\n"
+        #                                            f"Roles : {user_data['Roles']}\n\n"
+        #                                            f"Joined Time : {user_data['Joined Time']}\n\n"
+        #                                            f"Creation Time : {user_data['Creation Time']}\n)\n\n"
+        #                                            f"\n```")
 
         # for [name, value] in user_data.items():
         #     serverEmbed.add_field(name=f'Ay ({name})', value=f"*Ay ({value})*")
