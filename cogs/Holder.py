@@ -218,15 +218,16 @@ class Holder(commands.Cog):
     @commands.is_owner()
     async def announcement(self, ctx, *, message):
         """Holder Only!! Restricted command"""
-
-        for channel in ctx.guild.text_channels:
-            try:
-                embed = nextcord.Embed(title="Ay! (Developer Announcement!)", description=f"{message}", colour=Colors.dark_grey, timestamp=ctx.message.created_at)
-                embed.set_footer(text="Ay! (This message was announced by a developer of me, please read if you'd like as it may contain major updates!)")
-                await channel.send(embed=embed)
-                break
-            except:
-                continue
+        
+        for guild in self.client.guilds:
+            for channel in guild.text_channels:
+                try:
+                    embed = nextcord.Embed(title="Ay! (Developer Announcement!)", description=f"{message}", colour=Colors.dark_grey, timestamp=ctx.message.created_at)
+                    embed.set_footer(text="Ay! (This message was announced by a developer of me, please read if you'd like as it may contain major updates!)")
+                    await channel.send(embed=embed)
+                    break
+                except:
+                    continue
 
     async def cog_command_error(self, ctx, error):
 
