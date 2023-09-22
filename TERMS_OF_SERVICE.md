@@ -19,4 +19,4 @@ Changes to Terms:
 We may modify these terms at any time. Your continued use of Big Man after any changes constitutes your acceptance of the new terms.
 
 Contact Information:
-If you have any questions or concerns, please contact us at the discord server for the application: discord.gg/nEx4GjRfwX.
+If you have any questions or concerns, please attempt to contact fruitsyog on discord.
