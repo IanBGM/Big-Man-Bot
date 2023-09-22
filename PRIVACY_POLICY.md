@@ -19,4 +19,4 @@ Changes to Privacy Policy:
 We may modify this Privacy Policy at any time. Your continued use of Big Man after any changes constitutes your acceptance of the new Privacy Policy.
 
 Contact Information:
-If you have any questions or concerns about this Privacy Policy or your personal information, please contact us at the discord server for the application: discord.gg/nEx4GjRfwX.
+If you have any questions or concerns about this Privacy Policy or your personal information, please attempt to contact fruitsyog on discord.
