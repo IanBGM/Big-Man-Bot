@@ -1,3 +1,8 @@
+# THIS IS THE OLDEST VERSION OF BIG MAN (2022) AND IS NO LONGER IN RELATION TO THE NEWEST!
+## This repository is now archived.
+
+
+
 # Big Man Discord Bot
 
 ### Big Man
